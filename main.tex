@@ -1,13 +1,13 @@
-% DAFN26 - Robotics - Lecture 2
+% DAFN26 - Robotics - Lecture 3
 % Roberto Masocco <roberto.masocco@uniroma2.it>
-% April 12, 2026
+% April 22, 2026
 
 \documentclass[aspectratio=169]{beamer}
 
 % Slides layout
 \usepackage[
-    title={From C to C++ I},
-    subtitle={Objects, references, and namespaces},
+    title={From C to C++ II},
+    subtitle={Generic programming, the standard library, and callbacks},
     event={DAFN},
     author={Roberto Masocco},
     longauthor={Roberto Masocco},
@@ -16,7 +16,7 @@
     longinstitute={Tor Vergata University of Rome},
     department={Department of Civil Engineering and Computer Science Engineering},
     researchgroup={},
-    date={April 23, 2026}
+    date={April 29, 2026}
 ]{utvengbeamer}
 
 % Code listings settings
@@ -58,21 +58,15 @@
 \end{frame}
 
 % --- Section 1 ---
-\input{sections/transition}
+\input{sections/templates}
 
 % --- Section 2 ---
-\input{sections/classes}
+\input{sections/stl}
 
 % --- Section 3 ---
-\input{sections/raii}
+\input{sections/pointers}
 
 % --- Section 4 ---
-\input{sections/inheritance}
-
-% --- Section 5 ---
-\input{sections/references}
-
-% --- Section 6 ---
-\input{sections/namespaces}
+\input{sections/lambdas}
 
 \end{document}
