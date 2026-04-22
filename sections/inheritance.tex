@@ -1,0 +1,99 @@
+% Section 4 - Inheritance and virtual dispatch
+% Roberto Masocco <roberto.masocco@uniroma2.it>
+% April 12, 2026
+
+% ### Inheritance and virtual dispatch ###
+\section{Inheritance and virtual dispatch}
+\graphicspath{{figs/section4/}}
+
+% --- Inheritance ---
+\begin{frame}{Inheritance}
+	\justifying
+	\textbg{Inheritance} allows a class (\textbg{derived}) to build upon another class (\textbg{base}), automatically acquiring all of its members.\\
+	\bigskip
+	The syntax mirrors what you know from \emph{e.g.} Python, with one important addition — an \textbg{access specifier} on the base class:
+	\begin{itemize}
+		\item \texttt{class Derived~:~public Base} — the most common form; the public interface of \texttt{Base} remains public in \texttt{Derived};
+		\item \texttt{protected} and \texttt{private} inheritance exist but are rarely used.
+	\end{itemize}
+	\bigskip
+	A derived class \textbg{extends} the base:
+	\begin{itemize}
+		\item it may \textbg{add} new data members and member functions;
+		\item it may \textbg{override} member functions defined in the base.
+	\end{itemize}
+	\textbg{Its constructor must explicitly call a base constructor.}
+\end{frame}
+\begin{frame}{Inheritance}{Virtual dispatch}
+	\justifying
+	Consider a pointer (or reference) of type \texttt{Base *} pointing to an object of type \texttt{Derived}.\\
+	\textbg{Which version of an overridden member function should be called?}\\
+	\bigskip
+	\begin{itemize}
+		\item Without \texttt{virtual}: the \textbg{static type} (\emph{i.e.}, \texttt{Base}) determines the call — always the base version, decided at \textbg{compile time};
+		\item With \texttt{virtual}: the \textbg{dynamic type} (\emph{i.e.}, \texttt{Derived}) determines the call — the correct override, decided at \textbg{runtime}.
+	\end{itemize}
+	\bigskip
+	\textbg{Declaring a member function} \texttt{virtual} in the base class enables \textbg{runtime polymorphism}.\\
+	Derived classes that override it should mark it \texttt{override} — this lets the compiler catch mistakes.
+	\begin{block}{}
+		\centering
+		\texttt{override} is not required, but you should always use it for clarity.
+	\end{block}
+  \textbg{Destructors} are often \texttt{virtual} (why? Think. More on this shortly...)
+\end{frame}
+\begin{frame}{Inheritance}{The vtable}
+	\justifying
+	Runtime dispatch has to be implemented somehow. The standard mechanism is the \textbg{virtual table} (\textbg{vtable}).\\
+	\bigskip
+	Each class that has at least one \texttt{virtual} function gets a \textbg{vtable}: a static array of \textbg{function pointers}, one per virtual function, pointing to the correct override for that class.\\
+	\bigskip
+	Each \textbg{object} of such a class carries a hidden pointer (\textbg{vptr}) to its class's vtable.\\
+	\bigskip
+	A virtual call then becomes
+	\begin{enumerate}
+		\item dereference the \textbg{vptr} to reach the vtable;
+		\item index into the vtable to get the \textbg{function pointer};
+		\item \textbg{call} through the pointer.
+	\end{enumerate}
+	\bigskip
+	\begin{block}{}
+		\centering
+		One extra indirection at runtime — a small, constant cost for full \textbf{polymorphism}.
+	\end{block}
+\end{frame}
+\begin{frame}{Inheritance}{Pure virtual functions and abstract classes}
+	\justifying
+	A \textbg{pure virtual function} is a virtual function \textbg{declared with} \texttt{= 0} and \textbg{not defined in the base class}.\\
+	\bigskip
+	A class with at least one pure virtual function is \textbg{abstract}:
+	\begin{itemize}
+		\item it \textbg{cannot be instantiated} directly;
+		\item it acts as an \textbg{interface contract} — derived classes must provide implementations for all pure virtual functions, or they too become abstract.
+	\end{itemize}
+	\bigskip
+	Abstract classes are the primary mechanism for defining \textbg{interfaces} in C++.\\
+	\bigskip
+	\begin{alertblock}{Virtual destructors}
+		\justifying
+		If a class is meant to be used polymorphically (via base pointers), its destructor \textbr{must be virtual}.
+		Otherwise, deleting a \texttt{Derived} object through a \texttt{Base *} will only call the base destructor, potentially \textbr{leaking resources}.
+	\end{alertblock}
+\end{frame}
+\begin{frame}{Inheritance}{\texttt{dynamic\_cast}}
+	\justifying
+	Sometimes it is necessary to \textbg{recover the derived type} from a base pointer or reference — for example, to access a function that exists only in the derived class.\\
+	\bigskip
+	\texttt{dynamic\_cast<Derived *>(base\_ptr)} performs this at \textbg{runtime}:
+	\begin{itemize}
+		\item if the pointed object is of type \texttt{Derived} (or a subclass), it \textbg{returns a valid pointer};
+		\item otherwise, it returns \texttt{nullptr} (for pointer casts) or \textbg{throws} \texttt{std::bad\_cast} (for reference casts).
+	\end{itemize}
+	\bigskip
+	It requires \textbg{at least one virtual function} in the hierarchy (the vtable is what makes the check possible).\\
+	\bigskip
+	\begin{alertblock}{}
+		\centering
+		Frequent use of \texttt{dynamic\_cast} often signals a \textbr{design problem}.
+	\end{alertblock}
+\end{frame}

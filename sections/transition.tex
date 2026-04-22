@@ -1,0 +1,76 @@
+% Section 1 - The C-to-C++ transition
+% Roberto Masocco <roberto.masocco@uniroma2.it>
+% April 12, 2026
+
+% ### The C-to-C++ transition ###
+\section{The C-to-C++ transition}
+\graphicspath{{figs/section1/}}
+
+% --- C and C++ ---
+\begin{frame}{C and C++}{What is the relationship?}
+	\justifying
+	C++ was designed as a \textbg{superset of C}: almost all valid C code is also valid C++ code.\\
+	\bigskip
+	Everything you know from C is still there:
+	\begin{itemize}
+		\item primitive types, arrays, and \textbg{pointers};
+		\item \textbg{structs}, unions, and enumerations;
+		\item operators;
+		\item the \textbg{standard C library} (\texttt{<cstdio>}, \texttt{<cstdlib>}, \texttt{<cstring>}...);
+		\item manual memory management with \texttt{malloc}/\texttt{free};
+		\item \textbg{preprocessor} directives (\texttt{\#include}, \texttt{\#define}, \texttt{\#ifdef}, \texttt{\#endif}...).
+	\end{itemize}
+	\begin{block}{}
+		\centering
+		Dust off your C skills. C++ adds \textbf{a lot} on top of them.
+	\end{block}
+\end{frame}
+
+% --- The C-to-C++ transition ---
+\begin{frame}{The C-to-C++ transition}{What changes}
+	\justifying
+	Some conventions change when moving to C++.\\
+	\bigskip
+	\textbg{File extensions} reflect the language:
+	\begin{itemize}
+		\item \texttt{.cpp} (or \texttt{.cc}) for source files;
+		\item \texttt{.hpp} (or \texttt{.hh}) for header files.
+	\end{itemize}
+	\bigskip
+	\textbg{Include guards} are replaced by the cleaner pragma:
+	\begin{itemize}
+		\item \texttt{\#pragma once} at the top of every header file.
+	\end{itemize}
+	\bigskip
+	\textbg{Compilation} uses a C++-aware compiler and specifying the \textbg{language standard} is relevant:
+	\begin{itemize}
+		\item \texttt{g++ -std=c++17 -o my\_program my\_program.cpp}
+	\end{itemize}
+	\begin{block}{}
+		\centering
+		This course targets \textbf{C++17}, the standard required by ROS 2 Jazzy.
+	\end{block}
+\end{frame}
+\begin{frame}{The C-to-C++ transition}{What is added}
+	\justifying
+	C++ additions are designed to support \textbg{large-scale}, \textbg{maintainable} software; we need to cover:
+	\begin{itemize}
+		\item \textbg{classes}: encapsulation, constructors, destructors, member functions;
+		\item \textbg{RAII}: the most important C++ programming idiom;
+		\item \textbg{inheritance} and \textbg{virtual dispatch}: polymorphism with a concrete implementation;
+		\item \textbg{references}: a safer, cleaner alternative to pointers in many contexts;
+		\item \textbg{namespaces}: organizing and partitioning large codebases;
+		\item \textbg{templates}: generic programming, the foundation of the standard library;
+		\item \textbg{smart pointers} and the \textbg{standard library}: safer memory and modern containers;
+		\item \textbg{lambdas} and \textbg{callbacks}: the backbone of event-driven programming;
+		\item \textbg{concurrency}: \texttt{std::thread}, mutexes, condition variables, and atomics.
+	\end{itemize}
+\end{frame}
+\begin{frame}{The C-to-C++ transition}
+  \begin{block}{}
+    \centering
+    This lecture is \href{https://github.com/robmasocco/DAFN26_Robotics_2}{\color{blue}\underline{here}}.\\
+    Code examples are available \href{https://github.com/IntelligentSystemsLabUTV/ros2-examples/tree/jazzy/tools/cpp-examples}{\color{blue}\underline{in the \texttt{tools/cpp-examples/} subfolders}} of the materials.\\
+    Every lecture ends with \textbf{examples} showing new language features and an \textbf{exercise}.
+  \end{block}
+\end{frame}

@@ -1,0 +1,65 @@
+% Section 3 - RAII
+% Roberto Masocco <roberto.masocco@uniroma2.it>
+% April 12, 2026
+
+% ### RAII ###
+\section{RAII}
+\graphicspath{{figs/section3/}}
+
+% --- RAII ---
+\begin{frame}{RAII}{The resource problem}
+	\justifying
+	A \textbg{resource} is anything that must be \textbg{acquired before use} and \textbg{released after use}:
+	\begin{itemize}
+		\item \textbg{memory} allocated on the heap (\texttt{malloc}/\texttt{free} in C, \texttt{new}/\texttt{delete} in C++);
+		\item \textbg{mutex locks} acquired with \texttt{pthread\_mutex\_lock};
+		\item \textbg{file descriptors} opened with \texttt{fopen}/\texttt{open};
+		\item \textbg{network sockets}, hardware handles, GPU buffers...
+	\end{itemize}
+	\bigskip
+	In C, the programmer is responsible for releasing every resource on \textbg{every possible exit path} from a function — including error paths.\\
+	\bigskip
+	\begin{alertblock}{The classic bug}
+		\justifying
+		An early \texttt{return}, a \texttt{goto}, or an unhandled error condition leaves a \textbr{resource unreleased}.\\
+		In a long-running system this causes \textbr{resource leaks} that accumulate over time.
+	\end{alertblock}
+\end{frame}
+\begin{frame}{RAII}{Resource Acquisition Is Initialization}
+	\begin{block}{Definition of RAII}
+		\justifying
+		\textbf{Resource Acquisition Is Initialization (RAII)} is a programming idiom in which a resource is \textbf{acquired in the constructor} of an object and \textbf{released in the destructor}.
+	\end{block}
+	\justifying
+	\bigskip
+	Because the destructor is \textbg{guaranteed to run} when an object goes out of scope, resource release becomes \textbg{automatic and unconditional}:
+	\begin{itemize}
+		\item no matter how many \texttt{return} statements exist in a function;
+		\item no matter which branch of an \texttt{if}/\texttt{switch} is taken;
+		\item even if an \textbg{exception} is thrown.
+	\end{itemize}
+	\bigskip
+	\begin{block}{}
+		\centering
+		\textbf{RAII is the most important C++ programming idiom.}\\
+		Every major abstraction in the standard library is built on it.
+	\end{block}
+\end{frame}
+\begin{frame}{RAII}{RAII in practice}
+	\justifying
+	The idiom is not a language feature — it is a \textbg{design pattern} that the language makes reliable through its object lifetime rules.\\
+	\smallskip
+	Some examples of objects that use this idiom in C++, from your OS course:
+	\begin{itemize}
+		\item a \textbg{mutex wrapper} that locks on construction and unlocks on destruction;
+		\item a \textbg{file handle} class that opens on construction and closes on destruction;
+		\item a \textbg{memory buffer} class that allocates on construction and deallocates on destruction.
+	\end{itemize}
+	\smallskip
+	In C++ the standard library provides \textbg{ready-made RAII wrappers} for all common resources:
+	\begin{itemize}
+		\item \texttt{std::unique\_ptr}, \texttt{std::shared\_ptr} for heap memory;
+		\item \texttt{std::lock\_guard}, \texttt{std::unique\_lock} for mutexes;
+		\item \texttt{std::fstream} for files.
+	\end{itemize}
+\end{frame}
