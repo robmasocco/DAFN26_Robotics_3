@@ -41,7 +41,7 @@
 
 {
   auto p = std::make_unique<int>(42); // preferred creation
-  std::cout << * p << std::endl;      // 42
+  std::cout << *p << std::endl;      // 42
 
   auto q = std::move(p); // ownership transferred to q
                          // p is now empty (nullptr)

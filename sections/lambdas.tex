@@ -95,7 +95,7 @@ f = [](int x) { return x * 2; }; // a lambda
 // std::function objects can be stored in containers
 std::vector<std::function<void(float)>> clbks;
 clbks.push_back([](float v) { std::cout << v << std::endl; });
-clbks.push_back([](float v) { /* log v */ });
+clbks.push_back([](float v) { return std::log(v); });
 for (auto & cb : clbks) cb(3.14f);
     \end{lstlisting}
 	\end{columns}
@@ -103,17 +103,17 @@ for (auto & cb : clbks) cb(3.14f);
 \begin{frame}[fragile]{Lambdas and callbacks}{\texttt{std::function} and \texttt{std::bind}}
 	\begin{columns}
 		\column{.9\textwidth}
-		\begin{lstlisting}[style=codebeamer, language=C++, caption=\texttt{std::bind} compared to its lambda equivalent.]
+		\begin{lstlisting}[style=codebeamer, language=C++, caption=\texttt{std::bind} usage example to bind a function to some of its arguments.]
 #include <functional>
+#include <iostream>
 
 int add(int a, int b) { return a + b; }
 
-// Bind first argument to 10; second remains free (_1)
+// Bind first argument to 10, second remains free
+// A ``placeholder'' (special value set later on call) is used
 auto add10 = std::bind(&add, 10, std::placeholders::_1);
-std::cout << add10(5) << std::endl; // 15
 
-// The modern equivalent with a lambda
-auto add10_lambda = [](int b) { return add(10, b); };
+std::cout << add10(5) << std::endl; // 15
     \end{lstlisting}
 	\end{columns}
 \end{frame}
